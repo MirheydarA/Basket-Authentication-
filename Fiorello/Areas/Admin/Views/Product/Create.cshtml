@@ -1,0 +1,87 @@
+﻿@using Fiorello.Areas.Admin.ViewModels.Product
+@using Fiorello.Enum
+@model ProductCreateVM
+
+
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Create Product</h1>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <form enctype="multipart/form-data" asp-action="create" asp-controller="product" method="post">
+                <div class="form-group">
+                    <label asp-for="Name"></label>
+                    <input class="form-control" asp-for="Name"></input>
+                    <span asp-validation-for="Name"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Title"></label>
+                    <input class="form-control" asp-for="Title"></input>
+                    <span asp-validation-for="Title"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Description"></label>
+                    <input class="form-control" asp-for="Description"></input>
+                    <span asp-validation-for="Description"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="AdditionalInfo"></label>
+                    <input class="form-control" asp-for="AdditionalInfo"></input>
+                    <span asp-validation-for="AdditionalInfo"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Price"></label>
+                    <input class="form-control" asp-for="Price"></input>
+                    <span asp-validation-for="Price"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ProductStatusType" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <select asp-for="ProductStatusType" asp-items="@Html.GetEnumSelectList<ProductStatus>()">
+                            <option selected="selected" value="">Please select</option>
+                        </select>
+                        <span asp-validation-for="ProductStatusType" class="text-danger" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Photo"></label>
+                    <input class="form-control" asp-for="Photo"></input>
+                    <span asp-validation-for="Photo"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Photos"></label>
+                    <input class="form-control" asp-for="Photos"></input>
+                    <span asp-validation-for="Photos"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ProductCategoryId"></label>
+                    <select asp-for="ProductCategoryId" asp-items="Model.ProductCategories" class="form-select" aria-label="Default select example">
+                        <option selected>Product Category Id</option>
+                    </select>
+                    <span asp-validation-for="ProductCategoryId"></span>
+                </div>
+
+
+                    
+
+                <button class="btn btn-primary" type="submit">Create</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+@section scripts{
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+}

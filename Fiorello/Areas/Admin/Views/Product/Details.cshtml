@@ -1,0 +1,38 @@
+﻿@using Fiorello.Areas.Admin.ViewModels.Product
+@model ProductDetailsVM
+
+<a></a>
+
+<h3>Name</h3>
+<p>@Model.Name</p>
+<br />
+
+<h3>Title</h3>
+<p>@Model.Title</p>
+<br />
+
+
+<h3>Description</h3>
+<p>@Model.Description</p>
+<br />
+
+<h3>AdditionalInfo</h3>
+<p>@Model.AdditionalInfo</p>
+<br />
+
+<h3>Price</h3>
+<p>@Model.Price</p>
+<br />
+
+<h3>Price</h3>
+<p>@Model.ProductStatusType</p>
+<br />
+
+<h3>Photo</h3>
+<img class="w-25" src="~/assets/img/@Model.PhotoName"/>
+<br />
+
+<h3>Category</h3>
+<p>@Model.ProductCategory.Name</p>
+<br />
+

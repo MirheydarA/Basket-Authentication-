@@ -1,0 +1,23 @@
+﻿@using Fiorello.Areas.Admin.ViewModels.ProductCategory
+@model ProductCategoryUpdateVM
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Update Product Category</h1>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <form asp-action="update" asp-controller="productcategory" method="post">
+                <div class="form-group">
+                    <label asp-for="Name"></label>
+                    <input class="form-control" asp-for="Name"></input>
+                    <span asp-validation-for="Name"></span>
+                </div>
+                <button class="btn btn-primary" type="submit">Update</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->

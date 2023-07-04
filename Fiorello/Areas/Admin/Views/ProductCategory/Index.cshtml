@@ -1,0 +1,107 @@
+﻿@using Fiorello.Areas.Admin.ViewModels.ProductCategory
+@model ProductCategoryIndexVM
+   <!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Product Category</h1>
+
+    <a class="btn btn-info" asp-action="Create" asp-controller="ProductCategory">Create</a>
+
+    <!-- DataTables Example -->
+    <div class="card shadow mb-4">
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Created Date</th>
+                            <th>Modified Date</th>
+                            <th>Deleted Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead
+                    <tbody>
+                        @foreach (var productCategory in Model.ProductCategories)
+                        {
+                        <tr>
+                            <td>@productCategory.Name</td>
+                            <td>@productCategory.CreatedAt</td>
+                            <td>@productCategory.ModifiedAt</td>
+                            <td>@productCategory.DeletedAt</td>
+                            <td>    
+                            @if (!productCategory.IsDeleted)
+                                {
+                                    <span class="text-success">Active</span>
+                                }
+                                else
+                                {
+                                    <span class="text-danger">Non-Active</span>
+                                }
+                            </td>   
+                            <td>
+                                <a asp-action="Delete" asp-controller="productcategory" asp-route-id="@productCategory.Id" class="btn btn-danger btn-delete">Delete</a>
+                                <a asp-action="Update" asp-controller="productcategory" asp-route-id="@productCategory.Id" class="btn btn-primary">Update</a>
+                            </tr>
+                            
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+@section scripts{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(".btn-delete").on("click", (e)=>{
+            e.preventDefault()
+
+            Swal.fire({
+  title: 'Are you sure?',
+  text: "You won't be able to revert this!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'Yes, delete it!'
+}).then((result) => {
+  if (result.isConfirmed) {
+
+      let link = e.target.getAttribute("href")
+            fetch(link).then(res =>{
+                    //console.log(res.ok)
+                if(res.ok == true){
+                     Swal.fire(
+                       'Deleted!',
+                       'Your file has been deleted.',
+                       'success'
+                  ).then(()=>{
+                        window.location.reload()
+                      })
+                  
+                }else{
+                     Swal.fire({
+  icon: 'error',
+  title: 'Oops...',
+  text: 'Something went wrong!',
+  footer: '<a href="">Why do I have this issue?</a>'
+})
+                }
+            })
+   
+  }
+})
+
+           
+        
+            
+        })
+    </script>
+    
+}
