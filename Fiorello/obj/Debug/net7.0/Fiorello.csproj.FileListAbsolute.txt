@@ -144,3 +144,8 @@ C:\Users\ASUS\Desktop\projects\Fiorello\Fiorello\bin\Debug\net7.0\Microsoft.AspN
 C:\Users\ASUS\Desktop\projects\Fiorello\Fiorello\bin\Debug\net7.0\Microsoft.Extensions.Identity.Core.dll
 C:\Users\ASUS\Desktop\projects\Fiorello\Fiorello\bin\Debug\net7.0\Microsoft.Extensions.Identity.Stores.dll
 C:\Users\ASUS\Desktop\projects\Fiorello\Fiorello\bin\Debug\net7.0\Microsoft.Extensions.Options.dll
+C:\Users\ASUS\Desktop\projects\Fiorello\Fiorello\bin\Debug\net7.0\MailKit.dll
+C:\Users\ASUS\Desktop\projects\Fiorello\Fiorello\bin\Debug\net7.0\MimeKit.dll
+C:\Users\ASUS\Desktop\projects\Fiorello\Fiorello\bin\Debug\net7.0\NETCore.MailKit.dll
+C:\Users\ASUS\Desktop\projects\Fiorello\Fiorello\bin\Debug\net7.0\BouncyCastle.Crypto.dll
+C:\Users\ASUS\Desktop\projects\Fiorello\Fiorello\bin\Debug\net7.0\Newtonsoft.Json.dll

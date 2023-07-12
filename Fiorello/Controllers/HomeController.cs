@@ -6,6 +6,7 @@ namespace Fiorello.Controllers
     {
         public IActionResult Index()
         {
+
             return View();
         }
     }

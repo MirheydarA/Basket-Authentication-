@@ -21,6 +21,8 @@ namespace Fiorello.Areas.Admin.ViewModels.Product
         [Display(Name = "Additional Info")]
         public string AdditionalInfo { get; set; }
 
+        public int Quantity { get; set; }
+
         [Required] 
         public int Price { get; set; }
         public IFormFile Photo { get; set; }

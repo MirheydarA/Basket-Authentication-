@@ -1,5 +1,8 @@
 ﻿@using Fiorello.ViewModels.Account
 @model AccountLoginVm
+@{
+	Layout = null;
+}
 
 @{
 	var returnUrl = Context.Request.Query["ReturnUrl"];
@@ -39,7 +42,7 @@
 
 				<form method="post" asp-action="login" asp-controller="account" class="login100-form validate-form">
 					<span class="login100-form-title">
-						Login
+						User Login
 					</span>
 
 					<div asp-validation-summary="All"></div>

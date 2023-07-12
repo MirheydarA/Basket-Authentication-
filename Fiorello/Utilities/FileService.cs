@@ -40,7 +40,7 @@ namespace Fiorello.Utilities
         
         public bool IsBiggerThanSize(IFormFile file, int size = 100)
         {
-            if (file.Length / 1024 > size) return true;
+            if (file.Length / 1024 < size) return true;
 
             return false;   
         }

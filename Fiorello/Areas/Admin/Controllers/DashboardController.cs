@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Fiorello.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class DashboardController : Controller
+	[Authorize(Roles = "Superadmin, Admin, HR")]
+	public class DashboardController : Controller
     {
         public IActionResult Index()
         {

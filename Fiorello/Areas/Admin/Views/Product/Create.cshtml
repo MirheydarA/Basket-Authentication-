@@ -37,6 +37,12 @@
                 </div>
 
                 <div class="form-group">
+                    <label asp-for="Quantity"></label>
+                    <input class="form-control" asp-for="Quantity"></input>
+                    <span asp-validation-for="Quantity"></span>
+                </div>
+
+                <div class="form-group">
                     <label asp-for="Price"></label>
                     <input class="form-control" asp-for="Price"></input>
                     <span asp-validation-for="Price"></span>

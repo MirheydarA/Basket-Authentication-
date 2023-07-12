@@ -1,4 +1,7 @@
 ﻿using Fiorello.Entities;
+using Fiorello.Enum;
+using Fiorello.Utilities.EmailSender;
+using Fiorello.Utilities.EmailSender.Abstract;
 using Fiorello.ViewModels.Account;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,11 +12,15 @@ namespace Fiorello.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+		private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IEmailSender _emailSender;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+			_roleManager = roleManager;
+            _emailSender = emailSender;
         }
 
         [HttpGet]
@@ -23,7 +30,7 @@ namespace Fiorello.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(AccountRegisterVM model)
+        public async Task<IActionResult> Register(AccountRegisterVM model)
         {
             if (!ModelState.IsValid) return View();
 
@@ -36,7 +43,7 @@ namespace Fiorello.Controllers
                 PhoneNumber = model.PhoneNumber,
             };
 
-            var result = _userManager.CreateAsync(user, model.Password).Result;
+            var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
             {
                 foreach (var error in result.Errors)
@@ -46,8 +53,29 @@ namespace Fiorello.Controllers
                 return View();
             }
 
+
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { token, email = user.Email }, Request.Scheme);
+            var message = new Message(new string[] { user.Email }, "Confirmation email link", confirmationLink);
+            _emailSender.SendEmail(message);
+
+            await _userManager.AddToRoleAsync(user, UserRoles.User.ToString());
+
             return RedirectToAction(nameof(Login));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail(string token, string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                return View("Error");
+
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            return View(result.Succeeded ? nameof(ConfirmEmail) : "Error");
+        }
+
+
 
         [HttpGet]
         public IActionResult Login()
@@ -56,18 +84,18 @@ namespace Fiorello.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(AccountLoginVm model)
+        public async  Task<IActionResult> Login(AccountLoginVm model)
         {
             if (!ModelState.IsValid) return View();
 
-            var user = _userManager.FindByEmailAsync(model.Email).Result;
+            var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
                 ModelState.AddModelError(string.Empty, "Email or Password is incorrect");
                 return View();
             }
 
-            var result = _signInManager.PasswordSignInAsync(user, model.Password, false, false).Result;
+            var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
             if (!result.Succeeded)
             {
                 ModelState.AddModelError(string.Empty, "Email or Password is incorrect");
@@ -79,8 +107,7 @@ namespace Fiorello.Controllers
                 return Redirect(model.ReturnUrl);
             }
 
-
-            return RedirectToAction(nameof(Index), "home");
+            return RedirectToAction(nameof(Index), "Home");
         }
     }
 }

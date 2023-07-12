@@ -3,8 +3,6 @@ using System.Reflection;
 
 namespace Fiorello.Enum
 {
-    
-
     public enum ProductStatus
         {
             New,

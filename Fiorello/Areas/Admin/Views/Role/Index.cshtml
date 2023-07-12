@@ -1,0 +1,86 @@
+﻿@using Fiorello.Areas.Admin.ViewModels.Role
+@model RoleIndexVM
+   <!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Roles</h1>
+
+    <a class="btn btn-info" asp-action="Create" asp-controller="role">Create</a>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead
+                    <tbody>
+                        @foreach (var role in Model.Roles)
+                        {
+                        <tr>
+                            <td>@role.Name</td>                            
+                            <td>
+                                <a asp-action="Delete" asp-controller="role" asp-route-id="@role.Id" class="btn btn-danger btn-delete">Delete</a>
+                                <a asp-action="Update" asp-controller="role" asp-route-id="@role.Id" class="btn btn-primary">Update</a>
+                            </td>
+                        </tr>  
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+
+
+                                @section scripts{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(".btn-delete").on("click", (e)=>{
+            e.preventDefault()
+
+            Swal.fire({
+  title: 'Are you sure?',
+  text: "You won't be able to revert this!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'Yes, delete it!'
+}).then((result) => {
+  if (result.isConfirmed) {
+
+      let link = e.target.getAttribute("href")
+            fetch(link).then(res =>{
+                    //console.log(res.ok)
+                if(res.ok == true){
+                     Swal.fire(
+                       'Deleted!',
+                       'Your file has been deleted.',
+                       'success'
+                  ).then(()=>{
+                        window.location.reload()
+                      })
+                  
+                }else{
+                     Swal.fire({
+  icon: 'error',
+  title: 'Oops...',
+  text: 'Something went wrong!',
+  footer: '<a href="">Why do I have this issue?</a>'
+})
+                }
+            })
+  }
+})          
+        })
+    </script>
+}

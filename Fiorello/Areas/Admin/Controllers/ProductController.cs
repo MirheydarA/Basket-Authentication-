@@ -54,24 +54,21 @@ namespace Fiorello.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Create(ProductCreateVM model)
         {
-            model = new ProductCreateVM
+            model.ProductCategories = _context.ProductCategories.Where(pc => !pc.IsDeleted).Select(pc => new SelectListItem
             {
-                ProductCategories = _context.ProductCategories.Where(pc => !pc.IsDeleted).Select(pc => new SelectListItem
-                {
-                    Text = pc.Name,
-                    Value = pc.Id.ToString(),
-                }).ToList()
-            };
+                Text = pc.Name,
+                Value = pc.Id.ToString(),
+            }).ToList();
 
             if (!ModelState.IsValid) return View(model);
 
-            if (_fileService.IsImage(model.Photo))
+            if (!_fileService.IsImage(model.Photo))
             {
                 ModelState.AddModelError("Photo", "Fayl sekil formatinda deyil");
                 return View(model);
             }
 
-            if (_fileService.IsBiggerThanSize(model.Photo, 300))
+            if (!_fileService.IsBiggerThanSize(model.Photo, 900))
             {
                 ModelState.AddModelError("Photo", "Sekilin olcusu 100kb dan boyukdur");
                 return View(model);
@@ -79,13 +76,13 @@ namespace Fiorello.Areas.Admin.Controllers
 
             foreach (var photo in model.Photos)
             {
-                if (_fileService.IsImage(photo))
+                if (!_fileService.IsImage(photo))
                 {
                     ModelState.AddModelError("Photo", "Fayl sekil formatinda deyil");
                     return View(model);
                 }
 
-                if (_fileService.IsBiggerThanSize(photo, 300))
+                if (!_fileService.IsBiggerThanSize(photo, 900))
                 {
                     ModelState.AddModelError("Photo", "Sekilin olcusu 100kb dan boyukdur");
                     return View(model);
@@ -100,6 +97,7 @@ namespace Fiorello.Areas.Admin.Controllers
                 Title = model.Title,
                 Description = model.Description,
                 AdditionalInfo = model.AdditionalInfo,
+                Quantity = model.Quantity,
                 Price = model.Price,
                 PhotoName = _fileService.Upload(model.Photo),
                 ProductStatusType = model.ProductStatusType,
@@ -119,7 +117,7 @@ namespace Fiorello.Areas.Admin.Controllers
             }
 
             _context.SaveChanges();
-            return RedirectToAction("index");
+            return RedirectToAction(nameof(Index));
         }
         #endregion
 
@@ -180,7 +178,7 @@ namespace Fiorello.Areas.Admin.Controllers
 
             var product = _context.Products.Find(id);
 
-            if (model.Photo is null)
+            if (model.Photo is not null)
             {
                 if (_fileService.IsImage(model.Photo))
                 {
@@ -196,13 +194,13 @@ namespace Fiorello.Areas.Admin.Controllers
 
                 foreach (var photo in model.Photos)
                 {
-                    if (_fileService.IsImage(photo))
+                    if (!_fileService.IsImage(photo))
                     {
                         ModelState.AddModelError("Photo", "Seklin olcusu 100kb dan boyukdur");
                         return View();
                     }
 
-                    if (_fileService.IsBiggerThanSize(photo, 200))
+                    if (!_fileService.IsBiggerThanSize(photo, 200))
                     {
                         ModelState.AddModelError("Photo", "Sekilin olcusu 100kb dan boyukdur");
                         return View();

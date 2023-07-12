@@ -140,6 +140,9 @@ namespace Fiorello.Migrations
                     b.Property<int>("ProductStatusType")
                         .HasColumnType("int");
 
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

@@ -4,12 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Fiorello.ViewModels.Product
 {
-    public class ProductndexVM 
+    public class ProductIndexViewModel 
     {
-        public ProductndexVM()
+        public ProductIndexViewModel()
         {
             List<Models.Product> products = new List<Models.Product>();
         }
-        public Models.Product Products { get; set; }
+        public List<Models.Product> Products { get; set; }
     }
 }

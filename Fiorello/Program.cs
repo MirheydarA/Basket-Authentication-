@@ -1,6 +1,9 @@
 using Fiorello.DAL;
 using Fiorello.Entities;
 using Fiorello.Utilities;
+using Fiorello.Utilities.EmailSender;
+using Fiorello.Utilities.EmailSender.Abstract;
+using Fiorello.Utilities.EmailSender.Concrete;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,24 +14,63 @@ builder.Services.AddSingleton<IFIleService, FileService>();
 
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequiredUniqueChars = 3;
-    options.Password.RequireDigit = true;
-    options.Password.RequiredLength = 6;
-    options.Password.RequireUppercase = false;
-    options.User.RequireUniqueEmail = true;
-}).AddEntityFrameworkStores<AppDbContext>();
+	options.Password.RequireNonAlphanumeric = false;
+	options.Password.RequiredUniqueChars = 3;
+	options.Password.RequireDigit = true;
+	options.Password.RequiredLength = 6;
+	options.Password.RequireUppercase = false;
+	options.User.RequireUniqueEmail = true;
+	options.SignIn.RequireConfirmedEmail = true;
+}).AddEntityFrameworkStores<AppDbContext>()
+  .AddDefaultTokenProviders();
+
+var configuration = builder.Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
+builder.Services.AddSingleton(configuration);
+builder.Services.AddSingleton<IEmailSender, EmailSender>();
+
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+options.Events.OnRedirectToLogin = options.Events.OnRedirectToAccessDenied = context =>
+{
+	if (context.HttpContext.Request.Path.Value.StartsWith("/admin") || context.HttpContext.Request.Path.Value.StartsWith("/Admin"))
+	{
+		var redirectPath = new Uri(context.RedirectUri);
+		context.Response.Redirect("/admin/account/login" + redirectPath.Query);
+	}
+	else
+	{
+		var redirectPath = new Uri(context.RedirectUri);
+		context.Response.Redirect("/account/login" + redirectPath.Query);
+	}
+	return Task.CompletedTask;
+};
+
+});
 
 var app = builder.Build();
+
 
 app.MapControllerRoute(
            name: "areas",
            pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
-app.MapDefaultControllerRoute();
+app.MapControllerRoute(
+           name: "default",
+           pattern: "{controller=home}/{action=index}/{id?}");
 app.UseStaticFiles();
- 
+
 app.UseAuthentication();
 app.UseAuthorization();
+
+
+
+
+using (var scope = app.Services.CreateScope())
+{
+	var roloManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
+	var userManager = scope.ServiceProvider.GetService<UserManager<User>>();
+	await Dbinitializer.SeedAsync(roloManager, userManager);
+}
 
 app.Run();
