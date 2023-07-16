@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Fiorello.Areas.Admin.Controllers
 {
-	[Area("Admin")]
+    [Area("Admin")]
 	public class AccountController : Controller
 	{
 		private readonly UserManager<User> _userManager;

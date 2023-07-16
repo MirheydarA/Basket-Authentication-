@@ -1,5 +1,4 @@
-﻿using Fiorello.Entities;
-using Microsoft.ReportingServices.ReportProcessing.ReportObjectModel;
+﻿using Microsoft.ReportingServices.ReportProcessing.ReportObjectModel;
 
 namespace Fiorello.Areas.Admin.ViewModels.User
 {

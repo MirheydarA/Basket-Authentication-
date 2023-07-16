@@ -26,14 +26,51 @@ namespace Fiorello.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index(ProductIndexVM model)
         {
-            var products = _context.Products.OrderByDescending(pc => !pc.IsDeleted).ToList();
-            var model = new ProductIndexVM 
-            { Products = products };
+            var products = FilterByTitle(model.Title);
+            products = FilterByPrice(products, model.MinPrice, model.MaxPrice);
+            products = FilterByCategory(products, model.CategoriesIds);
+            products = FilterByCreatedAt(products, model.CreatedAtEnd, model.CreatedAtStart);
+
+            //var products = _context.Products.OrderByDescending(pc => !pc.IsDeleted).ToList();
+            model = new ProductIndexVM
+            {
+                Products = products.ToList(),
+                Categories = await _context.ProductCategories.Where(pc => !pc.IsDeleted).Select(pc => new SelectListItem
+                {
+                    Text = pc.Name,
+                    Value = pc.Id.ToString(),
+                }).ToListAsync()
+            };
             
             return View(model);
         }
+
+        #region FilterMethods
+
+        private IQueryable<Product> FilterByTitle(string? Title)
+        {
+            var products = !string.IsNullOrEmpty(Title) ? _context.Products.Include(p => p.ProductCategory).Where(p => p.Title.Contains(Title)) : _context.Products.Include(p => p.ProductCategory).Where(p => !p.IsDeleted);
+            return products;    
+        }
+
+        private IQueryable<Product> FilterByPrice(IQueryable<Product> products, decimal? minPrice, decimal? maxPrice)
+        {
+            return products.Where(p => minPrice != null ? p.Price >= minPrice : true && maxPrice != null ? p.Price <= maxPrice : true);
+        }
+
+        private IQueryable<Product> FilterByCategory(IQueryable<Product> products, List<int> categoriesIds)
+        {
+            return products.Where(p => categoriesIds.Count == 0 ? true : categoriesIds.Contains(p.ProductCategoryId));
+        }
+
+        private IQueryable<Product> FilterByCreatedAt(IQueryable<Product> products, DateTime? createdAtStart, DateTime? createdAtEnd)
+        {
+            return products.Where(p => createdAtStart != null ? p.CreatedAt.Date >= createdAtStart.Value.Date : true && createdAtEnd != null ? p.CreatedAt.Date <= createdAtEnd.Value.Date : true);
+        }
+
+        #endregion
 
         #region Create
 

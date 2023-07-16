@@ -4,6 +4,62 @@
 <div class="container-fluid">
 
     <!-- Page Heading -->
+    
+        <h1 class="h3 mb-2 text-gray-800">Search</h1>
+
+    <div class="card shadow">
+        <div class="card-body">
+
+    <form method="get" asp-action="index" asp-controller="product">
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label asp-for="Title">Title</label>
+                    <input asp-for="Title" class="form-control"  >
+                </div>
+            </div>
+            <div class="col-6">
+                 <div class="form-group">
+                    <label asp-for="MinPrice">MinPrice</label>
+                    <input asp-for="MinPrice" class="form-control"  >
+                </div>
+            </div>
+            <div class="col-6">
+                 <div class="form-group">
+                    <label asp-for="MaxPrice">MaxPrice</label>
+                    <input asp-for="MaxPrice" class="form-control"  >
+                </div>
+            </div>
+            <div class="col-12">
+                 <div class="form-group">
+                    <label asp-for="CategoriesIds">Category</label>
+                      <select asp-for="CategoriesIds" asp-items="Model.Categories" multiple="multiple" class="form-control">
+                </select>
+                </div>
+            </div>
+
+            <div class="col-6">
+                 <div class="form-group">
+                    <label asp-for="CreatedAtStart">MinPrice</label>
+                    <input asp-for="CreatedAtStart" class="form-control"  >
+                </div>
+            </div>
+            <div class="col-6">
+                 <div class="form-group">
+                    <label asp-for="CreatedAtEnd">MaxPrice</label>
+                    <input asp-for="CreatedAtEnd" class="form-control"  >
+                </div>
+            </div>
+
+        </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+        </div>
+    </div>
+    <br/>
+
+
     <h1 class="h3 mb-2 text-gray-800">Product</h1>
 
     <a class="btn btn-info" asp-action="Create" asp-controller="product">Create</a>
@@ -104,5 +160,21 @@
             
         })
     </script>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
+
+    <script>
+        $(document).ready(function () {
+            $('#CategoriesIds').multiselect({
+                includeSelectAllOption: true,
+            });
+        });
+    </script>
+
     
 }

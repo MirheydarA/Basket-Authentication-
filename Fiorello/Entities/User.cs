@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Fiorello.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Fiorello.Entities
 {
@@ -6,5 +7,6 @@ namespace Fiorello.Entities
     {
         public string Fullname { get; set; }
         public string Country { get; set; }
+        public Basket Basket { get; set; }
     }
 }

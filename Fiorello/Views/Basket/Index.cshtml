@@ -1,0 +1,39 @@
+﻿@using Fiorello.ViewModels.Basket
+@model List<BasketVM>
+
+<table class="table table-dark">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Photo</th>
+            <th scope="col">Title</th>
+            <th scope="col">Count</th>
+            <th scope="col">Stock Quantity</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var basketProduct in Model)
+        {
+            <tr id= "@basketProduct.Id" >
+                <th scope="row">@basketProduct.Id</th>
+                <td><img style="max-width: 200px" src="~/assets/img/@basketProduct.PhotoName" /></td>
+                <td>@basketProduct.Title</td>
+                <td>@basketProduct.Count</td>
+                <td>@basketProduct.StockQuantity</td>
+                <td>
+                        <a class="btn btn-success" asp-route-id ="@basketProduct.Id" asp-action="increase" asp-controller="basket">+</a>
+                        <a class="btn btn-danger" asp-route-id ="@basketProduct.Id" asp-action="decrease" asp-controller="basket">-</a>
+                        <a class="btn btn-danger" asp-route-id ="@basketProduct.Id" asp-action="delete" asp-controller="basket">Delete</a>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+
+@section scripts{
+    <script src="~/assets/js/JavaScript.js"></script>
+}
+

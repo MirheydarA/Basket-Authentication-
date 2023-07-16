@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Fiorello.Utilities
 {
-	public static class Dbinitializer
+    public static class Dbinitializer
 	{
 		public async static Task SeedAsync(RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
 		{

@@ -23,6 +23,7 @@ namespace Fiorello.Models
         public DateTime? DeletedAt { get; set; }
         public int ProductCategoryId { get; set; }
         public ProductCategory ProductCategory { get; set; }
+        public ICollection<BasketProduct> BasketProducts { get; set; }
 
     }
 }

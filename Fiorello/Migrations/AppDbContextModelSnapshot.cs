@@ -95,6 +95,52 @@ namespace Fiorello.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Fiorello.Models.Basket", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Baskets");
+                });
+
+            modelBuilder.Entity("Fiorello.Models.BasketProduct", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BasketId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BasketId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("BasketProducts");
+                });
+
             modelBuilder.Entity("Fiorello.Models.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -338,6 +384,36 @@ namespace Fiorello.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Fiorello.Models.Basket", b =>
+                {
+                    b.HasOne("Fiorello.Entities.User", "User")
+                        .WithOne("Basket")
+                        .HasForeignKey("Fiorello.Models.Basket", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Fiorello.Models.BasketProduct", b =>
+                {
+                    b.HasOne("Fiorello.Models.Basket", "Basket")
+                        .WithMany("BasketProducts")
+                        .HasForeignKey("BasketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Fiorello.Models.Product", "Product")
+                        .WithMany("BasketProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Basket");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("Fiorello.Models.Product", b =>
                 {
                     b.HasOne("Fiorello.Models.ProductCategory", "ProductCategory")
@@ -411,8 +487,21 @@ namespace Fiorello.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Fiorello.Entities.User", b =>
+                {
+                    b.Navigation("Basket")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Fiorello.Models.Basket", b =>
+                {
+                    b.Navigation("BasketProducts");
+                });
+
             modelBuilder.Entity("Fiorello.Models.Product", b =>
                 {
+                    b.Navigation("BasketProducts");
+
                     b.Navigation("Photos");
                 });
 
